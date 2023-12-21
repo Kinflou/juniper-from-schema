@@ -3,7 +3,7 @@ resolver = "2"
 
 members = [
     "juniper-from-schema",
-    "juniper-from-schema-proc-macro",
+    "proc-macro",
     "juniper-from-schema-code-gen",
     "builder",
 
