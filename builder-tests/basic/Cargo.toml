@@ -1,5 +1,5 @@
 [package]
-name = "file"
+name = "basic"
 version = "0.1.0"
 authors = ["David Pedersen <david.pdrsn@gmail.com>"]
 edition = "2021"
@@ -8,7 +8,7 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-juniper-from-schema = { version = "0.5.2", path = "../../juniper-from-schema" }
+juniper-from-schema = { version = "0.6.0-dev", path = "../../juniper-from-schema" }
 juniper = "0.15"
 
 [build-dependencies]

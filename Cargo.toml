@@ -8,8 +8,8 @@ members = [
     "builder",
 
     # Tests
-    "juniper-from-schema-build-tests/basic",
-    "juniper-from-schema-build-tests/file",
+    "builder-tests/basic",
+    "builder-tests/file",
 ]
 
 exclude = ["generate-subscription-tests"]
