@@ -22,3 +22,4 @@ colored = "1.8"
 
 [dev_dependencies]
 version-sync = "0.8"
+juniper-from-schema-proc-macro = { path= "../proc-macro" }

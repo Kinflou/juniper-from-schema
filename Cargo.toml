@@ -4,7 +4,7 @@ resolver = "2"
 members = [
     "juniper-from-schema",
     "proc-macro",
-    "juniper-from-schema-code-gen",
+    "code-gen",
     "builder",
 
     # Tests

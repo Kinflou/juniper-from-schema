@@ -1,9 +1,8 @@
 //! See the docs for "juniper-from-schema" for more info about this.
 
+// dead_code,
 #![deny(
     unused_imports,
-    mutable_borrow_reservation_conflict,
-    dead_code,
     unused_variables,
     unused_must_use
 )]
@@ -76,7 +75,9 @@ impl CodeGen {
             }
         };
 
-        let output = CodeGenPass::new(&schema, &self.error_type, &self.context_type, ast_data);
+        let output = CodeGenPass::new(
+            &schema, &self.error_type, &self.context_type, ast_data
+        );
 
         match output.gen_juniper_code(&doc) {
             Ok(mut tokens) => {
