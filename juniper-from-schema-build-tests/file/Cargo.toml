@@ -12,4 +12,4 @@ juniper-from-schema = { version = "0.5.2", path = "../../juniper-from-schema" }
 juniper = "0.15"
 
 [build-dependencies]
-juniper-from-schema-build = { version = "0.5.2", path = "../../juniper-from-schema-build" }
+juniper-from-schema-build = { version = "0.5.2", path = "../../builder" }

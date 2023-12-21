@@ -41,7 +41,6 @@
 #![deny(
     dead_code,
     missing_docs,
-    mutable_borrow_reservation_conflict,
     unused_imports,
     unused_must_use,
     unused_variables

@@ -5,7 +5,7 @@ members = [
     "juniper-from-schema",
     "juniper-from-schema-proc-macro",
     "juniper-from-schema-code-gen",
-    "juniper-from-schema-build",
+    "builder",
 
     # Tests
     "juniper-from-schema-build-tests/basic",
