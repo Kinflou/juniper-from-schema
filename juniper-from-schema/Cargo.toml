@@ -15,6 +15,13 @@ name = "juniper-from-schema"
 readme = "README.md"
 repository = "https://github.com/davidpdrsn/juniper-from-schema.git"
 
+
+[dependencies.juniper]
+version = "0.15.11"
+#version = "0.16.0-dev"
+#git = "https://github.com/graphql-rust/juniper"
+#rev = "ace6935"
+
 [dependencies]
 juniper-from-schema-proc-macro = { version = "0.5.2", path = "../proc-macro" }
 

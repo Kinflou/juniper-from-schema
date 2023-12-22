@@ -10,6 +10,7 @@
 #![doc(html_root_url = "https://docs.rs/juniper-from-schema-code-gen/0.5.2")]
 
 mod ast_pass;
+pub mod utils;
 
 use ast_pass::{code_gen_pass::CodeGenPass, error, AstData};
 
