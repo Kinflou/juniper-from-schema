@@ -14,4 +14,4 @@ repository = "https://github.com/davidpdrsn/juniper-from-schema.git"
 
 [dependencies]
 juniper-from-schema-code-gen = { version = "0.5.2", path = "../code-gen" }
-syn = { version = "1", features = ["extra-traits"] }
+syn = { version = "2.0.42", features = ["extra-traits"] }
