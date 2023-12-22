@@ -1,9 +1,6 @@
 #![allow(clippy::let_unit_value)]
 #![allow(dead_code, unused_variables, unused_imports)]
 
-#[macro_use]
-extern crate juniper;
-
 use assert_json_diff::assert_json_include;
 use juniper::{Executor, FieldResult, Variables};
 use juniper_from_schema::{graphql_schema, graphql_schema_from_file};

@@ -1,8 +1,6 @@
 #![allow(clippy::too_many_arguments)]
 #![allow(dead_code, unused_variables, unused_imports)]
 
-#[macro_use]
-extern crate juniper;
 
 use assert_json_diff::assert_json_include;
 use chrono::prelude::*;
