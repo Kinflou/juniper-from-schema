@@ -1,6 +1,9 @@
 [package]
 version = "0.5.2"
-authors = ["David Pedersen <david.pdrsn@gmail.com>"]
+authors = [
+    "David Pedersen <david.pdrsn@gmail.com>",
+    "Kinflow"
+]
 categories = ["web-programming"]
 description = "Use juniper-from-schema from build.rs"
 documentation = "https://docs.rs/juniper-from-schema-build"

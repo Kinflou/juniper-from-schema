@@ -1,6 +1,9 @@
 [package]
 version = "0.5.2"
-authors = ["David Pedersen <david.pdrsn@gmail.com>"]
+authors = [
+    "David Pedersen <david.pdrsn@gmail.com>",
+    "Kinflow"
+]
 categories = ["web-programming"]
 description = "Internal code generation crate for juniper-from-schema"
 documentation = "https://docs.rs/juniper-from-schema-proc-macro"

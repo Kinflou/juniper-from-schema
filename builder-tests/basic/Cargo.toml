@@ -1,7 +1,10 @@
 [package]
 name = "basic"
 version = "0.1.0"
-authors = ["David Pedersen <david.pdrsn@gmail.com>"]
+authors = [
+    "David Pedersen <david.pdrsn@gmail.com>",
+    "Kinflow"
+]
 edition = "2021"
 publish = false
 
