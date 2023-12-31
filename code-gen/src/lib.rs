@@ -1,9 +1,9 @@
 //! See the docs for "juniper-from-schema" for more info about this.
 
-// dead_code,
 #![deny(
     unused_imports,
     unused_variables,
+    // dead_code,
     unused_must_use
 )]
 #![recursion_limit = "256"]

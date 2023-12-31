@@ -95,26 +95,12 @@ pub fn visit_document<'doc, V: SchemaVisitor<'doc>>(
 
     for def in &node.definitions {
         match def {
-            Definition::SchemaDefinition(inner) => visit_schema_definition(v, inner),
+            Definition::SchemaDefinition(inner) => v.visit_schema_definition(inner),
             Definition::TypeDefinition(inner) => visit_type_definition(v, inner),
             Definition::TypeExtension(inner) => visit_type_extension(v, inner),
-            Definition::DirectiveDefinition(inner) => visit_directive_definition(v, inner),
+            Definition::DirectiveDefinition(inner) => v.visit_directive_definition(inner),
         }
     }
-}
-
-pub fn visit_schema_definition<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::SchemaDefinition<'doc, &'doc str>,
-) {
-    v.visit_schema_definition(node)
-}
-
-pub fn visit_directive_definition<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::DirectiveDefinition<'doc, &'doc str>,
-) {
-    v.visit_directive_definition(node)
 }
 
 pub fn visit_type_definition<'doc, V: SchemaVisitor<'doc>>(
@@ -123,55 +109,13 @@ pub fn visit_type_definition<'doc, V: SchemaVisitor<'doc>>(
 ) {
     v.visit_type_definition(node);
     match node {
-        TypeDefinition::Scalar(inner) => visit_scalar_type(v, inner),
-        TypeDefinition::Object(inner) => visit_object_type(v, inner),
-        TypeDefinition::Interface(inner) => visit_interface_type(v, inner),
-        TypeDefinition::Union(inner) => visit_union_type(v, inner),
-        TypeDefinition::Enum(inner) => visit_enum_type(v, inner),
-        TypeDefinition::InputObject(inner) => visit_input_object_type(v, inner),
+        TypeDefinition::Scalar(inner) => v.visit_scalar_type(inner),
+        TypeDefinition::Object(inner) => v.visit_object_type(inner),
+        TypeDefinition::Interface(inner) => v.visit_interface_type(inner),
+        TypeDefinition::Union(inner) => v.visit_union_type(inner),
+        TypeDefinition::Enum(inner) => v.visit_enum_type(inner),
+        TypeDefinition::InputObject(inner) => v.visit_input_object_type(inner),
     }
-}
-
-pub fn visit_scalar_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::ScalarType<'doc, &'doc str>,
-) {
-    v.visit_scalar_type(node)
-}
-
-pub fn visit_object_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::ObjectType<'doc, &'doc str>,
-) {
-    v.visit_object_type(node)
-}
-
-pub fn visit_interface_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::InterfaceType<'doc, &'doc str>,
-) {
-    v.visit_interface_type(node)
-}
-
-pub fn visit_union_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::UnionType<'doc, &'doc str>,
-) {
-    v.visit_union_type(node)
-}
-
-pub fn visit_enum_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::EnumType<'doc, &'doc str>,
-) {
-    v.visit_enum_type(node)
-}
-
-pub fn visit_input_object_type<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::InputObjectType<'doc, &'doc str>,
-) {
-    v.visit_input_object_type(node)
 }
 
 pub fn visit_type_extension<'doc, V: SchemaVisitor<'doc>>(
@@ -180,56 +124,15 @@ pub fn visit_type_extension<'doc, V: SchemaVisitor<'doc>>(
 ) {
     v.visit_type_extension(node);
     match node {
-        TypeExtension::Scalar(inner) => visit_scalar_type_extension(v, inner),
-        TypeExtension::Object(inner) => visit_object_type_extension(v, inner),
-        TypeExtension::Interface(inner) => visit_interface_type_extension(v, inner),
-        TypeExtension::Union(inner) => visit_union_type_extension(v, inner),
-        TypeExtension::Enum(inner) => visit_enum_type_extension(v, inner),
-        TypeExtension::InputObject(inner) => visit_input_object_type_extension(v, inner),
+        TypeExtension::Scalar(inner) => v.visit_scalar_type_extension(inner),
+        TypeExtension::Object(inner) => v.visit_object_type_extension(inner),
+        TypeExtension::Interface(inner) => v.visit_interface_type_extension(inner),
+        TypeExtension::Union(inner) => v.visit_union_type_extension(inner),
+        TypeExtension::Enum(inner) => v.visit_enum_type_extension(inner),
+        TypeExtension::InputObject(inner) => v.visit_input_object_type_extension(inner),
     }
 }
 
-pub fn visit_scalar_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::ScalarTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_scalar_type_extension(node)
-}
-
-pub fn visit_object_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::ObjectTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_object_type_extension(node)
-}
-
-pub fn visit_interface_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::InterfaceTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_interface_type_extension(node)
-}
-
-pub fn visit_union_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::UnionTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_union_type_extension(node)
-}
-
-pub fn visit_enum_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::EnumTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_enum_type_extension(node)
-}
-
-pub fn visit_input_object_type_extension<'doc, V: SchemaVisitor<'doc>>(
-    v: &mut V,
-    node: &'doc schema::InputObjectTypeExtension<'doc, &'doc str>,
-) {
-    v.visit_input_object_type_extension(node)
-}
 
 #[derive(Debug)]
 pub struct And<A, B> {
