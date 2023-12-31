@@ -13,10 +13,10 @@ use graphql_parser::{schema::*, Pos};
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 pub fn type_name<'doc>(type_: &Type<'doc, &'doc str>) -> &'doc str {
-    match &*type_ {
-        Type::NamedType(name) => &name,
-        Type::ListType(item_type) => type_name(&*item_type),
-        Type::NonNullType(item_type) => type_name(&*item_type),
+    match type_ {
+        Type::NamedType(name) => name,
+        Type::ListType(item_type) => type_name(item_type),
+        Type::NonNullType(item_type) => type_name(item_type),
     }
 }
 
@@ -54,20 +54,16 @@ impl<'doc> SchemaVisitor<'doc> for AstData<'doc> {
         for interface in &obj.implements_interfaces {
             self.interface_implementors
                 .entry(interface)
-                .or_insert_with(Vec::new)
-                .push(&obj.name);
+                .or_default()
+                .push(obj.name);
         }
     }
 
     fn visit_scalar_type(&mut self, scalar: &'doc ScalarType<'doc, &'doc str>) {
-        match &*scalar.name {
+        match scalar.name {
             name if name == crate::DATE_TIME_SCALAR_NAME => {
                 let args = self.parse_directives(DateTimeScalarType(scalar));
-                if args.with_time_zone {
-                    self.include_time_zone_on_date_time_scalar = true;
-                } else {
-                    self.include_time_zone_on_date_time_scalar = false;
-                }
+                self.include_time_zone_on_date_time_scalar = args.with_time_zone;
                 self.user_scalars.insert(name);
             }
             name => {
@@ -77,19 +73,19 @@ impl<'doc> SchemaVisitor<'doc> for AstData<'doc> {
     }
 
     fn visit_enum_type(&mut self, enum_type: &'doc EnumType<'doc, &'doc str>) {
-        self.enum_types.insert(&enum_type.name);
+        self.enum_types.insert(enum_type.name);
     }
 
     fn visit_union_type(&mut self, union_type: &'doc UnionType<'doc, &'doc str>) {
-        self.union_types.insert(&union_type.name);
+        self.union_types.insert(union_type.name);
     }
 
     fn visit_input_object_type(&mut self, input_type: &'doc InputObjectType<'doc, &'doc str>) {
         for field in &input_type.fields {
             self.input_object_field_types
-                .entry(&input_type.name)
-                .or_insert_with(HashMap::new)
-                .insert(&field.name, &field.value_type);
+                .entry(input_type.name)
+                .or_default()
+                .insert(field.name, &field.value_type);
         }
     }
 
@@ -209,7 +205,7 @@ impl<'doc> AstData<'doc> {
     ) -> Option<&'doc str> {
         let field_map = &self.input_object_field_types.get(input_type_name)?;
         let type_ = field_map.get(field_name)?;
-        Some(type_name(&type_))
+        Some(type_name(type_))
     }
 
     pub fn is_subscription_type(&self, name: &'doc str) -> bool {
@@ -239,9 +235,7 @@ pub enum NullableType<'a> {
 }
 
 impl<'a> NullableType<'a> {
-    pub fn from_schema_type(ty: &Type<'a, &'a str>) -> Self {
-        map(&ty)
-    }
+    pub fn from_schema_type(ty: &Type<'a, &'a str>) -> Self { map(ty) }
 }
 
 #[cfg(test)]
@@ -259,18 +253,18 @@ fn map<'a>(ty: &Type<'a, &'a str>) -> NullableType<'a> {
     match ty {
         inner @ Type::NamedType(_) => map_inner(inner, false),
         Type::ListType(item_type) => {
-            let item_type = map_inner(&*item_type, false);
+            let item_type = map_inner(item_type, false);
             let list = NullableType::ListType(Box::new(item_type));
             NullableType::NullableType(Box::new(list))
         }
-        Type::NonNullType(inner) => map_inner(&*inner, true),
+        Type::NonNullType(inner) => map_inner(inner, true),
     }
 }
 
 fn map_inner<'a>(ty: &Type<'a, &'a str>, inside_non_null: bool) -> NullableType<'a> {
     match ty {
         Type::NamedType(name) => {
-            let inner_mapped = NullableType::NamedType(&name);
+            let inner_mapped = NullableType::NamedType(name);
             if inside_non_null {
                 inner_mapped
             } else {
@@ -278,14 +272,14 @@ fn map_inner<'a>(ty: &Type<'a, &'a str>, inside_non_null: bool) -> NullableType<
             }
         }
         Type::ListType(inner) => {
-            let inner_mapped = NullableType::ListType(Box::new(map(&*inner)));
+            let inner_mapped = NullableType::ListType(Box::new(map(inner)));
             if inside_non_null {
                 inner_mapped
             } else {
                 NullableType::NullableType(Box::new(inner_mapped))
             }
         }
-        Type::NonNullType(inner) => map_inner(&*inner, true),
+        Type::NonNullType(inner) => map_inner(inner, true),
     }
 }
 

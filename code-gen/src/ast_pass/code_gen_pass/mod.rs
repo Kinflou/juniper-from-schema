@@ -195,7 +195,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
     }
 
     fn visit_scalar_type(&mut self, node: &'doc schema::ScalarType<'doc, &'doc str>) {
-        match &*node.name {
+        match node.name {
             name if name == crate::DATE_TIME_SCALAR_NAME => {
                 // This case is special because it supports a directive. We don't need to parse and
                 // check the it though that is done by `AstData::visit_scalar_type`
@@ -208,7 +208,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
                 || name == crate::URL_SCALAR_NAME
                 || name == crate::UUID_SCALAR_NAME =>
             {
-                let () = self.parse_directives(node);
+                self.parse_directives(node);
 
                 if node.description.is_some() {
                     self.emit_error(node.position, ErrorKind::SpecialCaseScalarWithDescription);
@@ -222,7 +222,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
                     directives: _,
                 } = node;
 
-                let () = self.parse_directives(node);
+                self.parse_directives(node);
 
                 match &**name {
                     "String" | "Float" | "Int" | "Boolean" | "ID" => {
@@ -249,7 +249,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
             fields,
         } = node;
 
-        let () = self.parse_directives(node);
+        self.parse_directives(node);
 
         if self.ast_data.is_subscription_type(name) {
             if !implements_interfaces.is_empty() {
@@ -297,7 +297,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
             directives: _,
         } = node;
 
-        let () = self.parse_directives(node);
+        self.parse_directives(node);
 
         let implementors = self
             .ast_data
@@ -333,7 +333,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
             directives: _,
         } = node;
 
-        let () = self.parse_directives(node);
+        self.parse_directives(node);
 
         let name = format_ident!("{}", name);
 
@@ -371,7 +371,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
             directives: _,
         } = node;
 
-        let () = self.parse_directives(node);
+        self.parse_directives(node);
 
         let name = format_ident!("{}", name);
 
@@ -415,7 +415,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
             directives: _,
         } = node;
 
-        let () = self.parse_directives(node);
+        self.parse_directives(node);
 
         let name = format_ident!("{}", name);
         let fields = fields
@@ -430,7 +430,7 @@ impl<'doc> SchemaVisitor<'doc> for CodeGenPass<'doc> {
                     directives: _,
                 } = field;
 
-                let () = self.parse_directives(field);
+                self.parse_directives(field);
 
                 if default_value.is_some() {
                     self.emit_error(*position, ErrorKind::InputTypeFieldWithDefaultValue);
@@ -529,7 +529,7 @@ impl<'doc> CodeGenPass<'doc> {
                     directives: _,
                 } = arg;
 
-                let () = self.parse_directives(arg);
+                self.parse_directives(arg);
 
                 let default_value = default_value
                     .as_ref()
@@ -580,7 +580,7 @@ impl<'doc> CodeGenPass<'doc> {
         pos: Pos,
     ) -> Type {
         fn gen_leaf<'doc>(pass: &CodeGenPass<'doc>, name: &'doc str) -> Type {
-            match &*name {
+            match name {
                 "String" => Type::Scalar(Either::A(parse_quote! { std::string::String })),
                 "Float" => Type::Scalar(Either::A(parse_quote! { f64 })),
                 "Int" => Type::Scalar(Either::A(parse_quote! { i32 })),
@@ -656,19 +656,19 @@ impl<'doc> CodeGenPass<'doc> {
                 NullableType::ListType(inner) => {
                     if as_ref {
                         Type::List(Box::new(Type::Ref(Box::new(gen_node(
-                            pass, &*inner, false, pos,
+                            pass, inner, false, pos,
                         )))))
                     } else {
-                        Type::List(Box::new(gen_node(pass, &*inner, false, pos)))
+                        Type::List(Box::new(gen_node(pass, inner, false, pos)))
                     }
                 }
                 NullableType::NullableType(inner) => {
                     if as_ref {
                         Type::Nullable(Box::new(Type::Ref(Box::new(gen_node(
-                            pass, &*inner, false, pos,
+                            pass, inner, false, pos,
                         )))))
                     } else {
-                        Type::Nullable(Box::new(gen_node(pass, &*inner, false, pos)))
+                        Type::Nullable(Box::new(gen_node(pass, inner, false, pos)))
                     }
                 }
             }
@@ -743,7 +743,7 @@ impl<'doc> CodeGenPass<'doc> {
 
                 let field_type_name = self
                     .ast_data
-                    .input_object_field_type_name(&type_name, &key)
+                    .input_object_field_type_name(type_name, key)
                     .unwrap_or_else(|| {
                         panic!("input_object_field_type_name {} {}", type_name, key)
                     });
@@ -751,7 +751,7 @@ impl<'doc> CodeGenPass<'doc> {
                 let value_quote = self.quote_value(value, field_type_name, pos);
                 match self
                     .ast_data
-                    .input_object_field_is_nullable(&type_name, &key)
+                    .input_object_field_is_nullable(type_name, key)
                 {
                     Some(true) | None => {
                         if value == &Value::Null {
@@ -766,7 +766,7 @@ impl<'doc> CodeGenPass<'doc> {
             .collect::<Vec<_>>();
 
         // Set fields not given in map to `None`
-        if let Some(fields) = self.ast_data.input_object_field_names(&type_name) {
+        if let Some(fields) = self.ast_data.input_object_field_names(type_name) {
             for field_name in fields {
                 if !fields_seen.contains(field_name) {
                     let field_name = format_ident!("{}", field_name.to_snake_case());
@@ -1408,7 +1408,7 @@ impl<'doc> Field<'doc> {
     fn full_return_type(&self) -> syn::Type {
         maybe_wrap_final_return_type_in_result(
             self.return_type_not_wrapped_in_result(),
-            &self.error_type,
+            self.error_type,
             &self.directives,
         )
     }
@@ -1428,11 +1428,11 @@ impl<'doc> Field<'doc> {
 
         if let Some(ty) = &self.directives.stream_type {
             let ty = syn::parse_str(&ty.value).unwrap_or_else(|_| default_return_type());
-            maybe_wrap_final_return_type_in_result(ty, &self.error_type, &self.directives)
+            maybe_wrap_final_return_type_in_result(ty, self.error_type, &self.directives)
         } else {
             maybe_wrap_final_return_type_in_result(
                 default_return_type(),
-                &self.error_type,
+                self.error_type,
                 &self.directives,
             )
         }
@@ -1759,13 +1759,9 @@ impl<'a, 'doc> ToTokens for FieldToTokensForSubscriptionImpl<'a, 'doc> {
             let parts = args.iter().filter_map(|arg| {
                 let name = &arg.name_without_raw_ident;
 
-                if let Some(description) = &arg.description {
-                    Some(quote! {
-                        #name(description = #description)
-                    })
-                } else {
-                    None
-                }
+                arg.description.as_ref().map(|description| quote! {
+                    #name(description = #description)
+                })
             });
 
             graphql_attrs.push_fn(format_ident!("arguments"), parts);

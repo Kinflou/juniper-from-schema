@@ -142,7 +142,7 @@ impl fmt::Display for Error {
 
                 let out = errors
                     .iter()
-                    .map(|error| error.display(&schema).to_string())
+                    .map(|error| error.display(schema).to_string())
                     .collect::<Vec<_>>()
                     .join("\n\n");
 

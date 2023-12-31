@@ -24,14 +24,7 @@ impl<T: FromDirectiveArguments> FromDirectiveArguments for Option<T> {
     fn from_directive_args<'doc>(
         args: &'doc (&'doc str, Value<'doc, &'doc str>),
     ) -> Option<Result<Option<T>, ErrorKind>> {
-        match T::from_directive_args(args) {
-            // KEY didn't match
-            None => None,
-            Some(x) => {
-                // KEY *did* match
-                Some(x.map(Some))
-            }
-        }
+        T::from_directive_args(args).map(|x| x.map(Some))
     }
 }
 
@@ -226,15 +219,9 @@ impl FromDirectiveArguments for Ownership {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Infallible {
     pub value: bool,
-}
-
-impl Default for Infallible {
-    fn default() -> Self {
-        Infallible { value: false }
-    }
 }
 
 impl FromDirectiveArguments for Infallible {
@@ -256,7 +243,7 @@ impl FromDirectiveArguments for Infallible {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Async {
     pub value: bool,
 }
@@ -280,11 +267,6 @@ impl FromDirectiveArguments for Async {
     }
 }
 
-impl Default for Async {
-    fn default() -> Self {
-        Async { value: false }
-    }
-}
 
 #[derive(Debug, Default)]
 pub struct StreamType {

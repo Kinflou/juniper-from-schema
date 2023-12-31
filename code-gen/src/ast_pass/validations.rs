@@ -30,7 +30,7 @@ impl<'doc> SchemaVisitor<'doc> for FieldNameCaseValidator {
 
     fn visit_input_object_type(&mut self, ty: &'doc schema::InputObjectType<'doc, &'doc str>) {
         for field in &ty.fields {
-            self.validate_field(&field.name, field.position);
+            self.validate_field(field.name, field.position);
         }
     }
 }
@@ -38,7 +38,7 @@ impl<'doc> SchemaVisitor<'doc> for FieldNameCaseValidator {
 impl FieldNameCaseValidator {
     fn validate_fields<'doc>(&mut self, fields: &'doc [Field<'doc, &'doc str>]) {
         for field in fields {
-            self.validate_field(&field.name, field.position);
+            self.validate_field(field.name, field.position);
         }
     }
 

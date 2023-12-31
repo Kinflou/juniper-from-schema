@@ -10,3 +10,5 @@ generate-subscription-tests/generated_files/*.rs
 # JetBrains IDEA project configuration
 /.idea
 
+# Temporary New Code-Gen project exclusion
+code-gen-new/

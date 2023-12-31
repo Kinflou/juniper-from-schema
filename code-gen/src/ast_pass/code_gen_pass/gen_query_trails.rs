@@ -396,7 +396,7 @@ impl<'pass, 'doc> QueryTrailCodeGenPass<'pass, 'doc> {
         match obj {
             InternalQueryTrailNode::Object(_) => {}
             InternalQueryTrailNode::Interface(i) => {
-                if let Some(i) = &self.pass.ast_data.get_implementors_of_interface(&i.name) {
+                if let Some(i) = &self.pass.ast_data.get_implementors_of_interface(i.name) {
                     for interface_implementor_name in *i {
                         let ident = format_ident!("{}", interface_implementor_name);
                         destination_types.push(ident);
@@ -451,7 +451,7 @@ impl<'pass, 'doc> QueryTrailCodeGenPass<'pass, 'doc> {
                         }
                     }
 
-                    prev.insert(&field.name, (type_b, field_type_b));
+                    prev.insert(field.name, (type_b, field_type_b));
                 }
             }
         }
@@ -598,7 +598,7 @@ impl<'pass, 'doc> QueryTrailCodeGenPass<'pass, 'doc> {
             let arguments_methods = field
                 .arguments
                 .iter()
-                .map(|input_value| self.gen_argument_look_ahead_methods(input_value, &field.name));
+                .map(|input_value| self.gen_argument_look_ahead_methods(input_value, field.name));
 
             argument_type.extend(quote! {
                 /// This is used for inspecting arguments to a field.
@@ -624,7 +624,7 @@ impl<'pass, 'doc> QueryTrailCodeGenPass<'pass, 'doc> {
     ) -> TokenStream {
         let default_value = input_value.default_value.as_ref().map(|value| {
             self.pass.quote_value(
-                &value,
+                value,
                 type_name(&input_value.value_type),
                 input_value.position,
             )
@@ -779,7 +779,7 @@ fn build_union_fields_set<'d>(
     for type_ in &union.types {
         if let Some(fields) = fields_map.get(type_) {
             for field in fields {
-                union_fields_set.insert(HashFieldByName(&field));
+                union_fields_set.insert(HashFieldByName(field));
             }
         }
     }
@@ -793,12 +793,10 @@ fn build_fields_map<'a>(
     let mut map: HashMap<&'a str, Vec<&'a Field<'a, &'a str>>> = HashMap::new();
 
     for def in &doc.definitions {
-        if let Definition::TypeDefinition(type_def) = def {
-            if let TypeDefinition::Object(obj) = type_def {
-                for field in &obj.fields {
-                    let entry = map.entry(&obj.name).or_insert_with(Vec::new);
-                    entry.push(field);
-                }
+        if let Definition::TypeDefinition(TypeDefinition::Object(obj)) = def {
+            for field in &obj.fields {
+                let entry = map.entry(obj.name).or_default();
+                entry.push(field);
             }
         }
     }
