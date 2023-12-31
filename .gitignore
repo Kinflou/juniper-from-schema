@@ -1,5 +1,12 @@
+# Rust and Cargo
 /target
 **/*.rs.bk
 Cargo.lock
 /tmp
+
+# Project Tests
 generate-subscription-tests/generated_files/*.rs
+
+# JetBrains IDEA project configuration
+/.idea
+
