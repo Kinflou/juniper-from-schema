@@ -1259,7 +1259,7 @@ impl<'doc> ToTokens for Object<'doc> {
             implements_interfaces,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new_object();
+        let mut graphql_attrs = Attr::new_object();
 
         if let Some(description) = description {
             graphql_attrs.push_key_value(format_ident!("description"), description);
@@ -1488,7 +1488,7 @@ impl<'a, 'doc> ToTokens for FieldToTokensGraphqlObject<'a, 'doc> {
             directives,
         } = self.field;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
 
         if !args.is_empty() {
             let parts = args.iter().filter_map(|arg| {
@@ -1622,7 +1622,7 @@ impl<'a, 'doc> ToTokens for FieldToTokensInterface<'a, 'doc> {
 
         let args = args.iter().map(|arg| arg.to_tokens_for_interface());
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
 
         if let Some(desc) = description {
             graphql_attrs.push_key_value(format_ident!("description"), desc);
@@ -1749,7 +1749,7 @@ impl<'a, 'doc> ToTokens for FieldToTokensForSubscriptionImpl<'a, 'doc> {
             directives: _,
         } = self.field;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
 
         if let Some(description) = description {
             graphql_attrs.push_key_value(format_ident!("description"), description);
@@ -1971,7 +1971,7 @@ impl<'doc> ToTokens for Subscription<'doc> {
             fields,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new_subscription();
+        let mut graphql_attrs = Attr::new_subscription();
         graphql_attrs.push_key_value(format_ident!("Context"), context_type);
 
         if let Some(description) = description {
@@ -2033,7 +2033,7 @@ impl<'doc> ToTokens for Interface<'doc> {
             fields,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new_interface_top_level();
+        let mut graphql_attrs = Attr::new_interface_top_level();
         graphql_attrs.push_key_value(format_ident!("for"), quote! { [ #(#implementors),* ] });
         graphql_attrs.push_key_value(format_ident!("Context"), quote! { #context_type });
         graphql_attrs.push_key_value(
@@ -2065,7 +2065,7 @@ impl<'doc> ToTokens for Interface<'doc> {
                 .iter()
                 .map(|field| field.to_tokens_for_interface_impl(&trait_name));
 
-            let graphql_attr = GraphqlAttr::new_interface_top_level();
+            let graphql_attr = Attr::new_interface_top_level();
 
             tokens.extend(quote! {
                 #graphql_attr
@@ -2094,7 +2094,7 @@ impl<'doc> ToTokens for Union<'doc> {
             context_type,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
         graphql_attrs.push_key_value(format_ident!("Context"), context_type);
         graphql_attrs.push_key_value(
             format_ident!("Scalar"),
@@ -2241,7 +2241,7 @@ impl<'doc> ToTokens for EnumVariant<'doc> {
             graphql_name,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
         graphql_attrs.push_key_value(format_ident!("name"), graphql_name);
 
         match deprecation {
@@ -2279,7 +2279,7 @@ impl<'doc> ToTokens for InputObject<'doc> {
             fields,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
         if let Some(description) = description {
             graphql_attrs.push_key_value(format_ident!("description"), description);
         }
@@ -2378,7 +2378,7 @@ impl<'doc> ToTokens for InputObjectField<'doc> {
             description,
         } = self;
 
-        let mut graphql_attrs = GraphqlAttr::new();
+        let mut graphql_attrs = Attr::new();
         if let Some(description) = description {
             graphql_attrs.push_key_value(format_ident!("description"), description);
         }
@@ -2417,10 +2417,7 @@ impl ToTokens for SchemaType {
     }
 }
 
-fn add_deprecation_graphql_attr_token(
-    directives: &FieldDirectives,
-    graphql_attrs: &mut GraphqlAttr,
-) {
+fn add_deprecation_graphql_attr_token(directives: &FieldDirectives, graphql_attrs: &mut Attr) {
     if let Some(Deprecation::Deprecated(reason)) = &directives.deprecated {
         if let Some(reason) = reason {
             graphql_attrs.push_key_value(format_ident!("deprecated"), reason);
@@ -2431,21 +2428,21 @@ fn add_deprecation_graphql_attr_token(
 }
 
 #[derive(Debug)]
-enum GraphqlAttr {
-    Normal { items: Vec<GraphqlAttrItem> },
-    Object { items: Vec<GraphqlAttrItem> },
-    Interface { items: Vec<GraphqlAttrItem> },
-    Subscription { items: Vec<GraphqlAttrItem> },
+enum Attr {
+    Normal { items: Vec<AttrItem> },
+    Object { items: Vec<AttrItem> },
+    Interface { items: Vec<AttrItem> },
+    Subscription { items: Vec<AttrItem> },
 }
 
 #[derive(Debug)]
-enum GraphqlAttrItem {
+enum AttrItem {
     Bare(Ident),
     KeyValue { key: Ident, value: TokenStream },
     Fn { name: Ident, args: Vec<TokenStream> },
 }
 
-impl GraphqlAttr {
+impl Attr {
     fn new() -> Self {
         Self::Normal { items: Vec::new() }
     }
@@ -2464,22 +2461,22 @@ impl GraphqlAttr {
 
     fn push(&mut self, key: Ident) {
         let items = match self {
-            GraphqlAttr::Normal { items } => items,
-            GraphqlAttr::Object { items } => items,
-            GraphqlAttr::Interface { items } => items,
-            GraphqlAttr::Subscription { items } => items,
+            Attr::Normal { items } => items,
+            Attr::Object { items } => items,
+            Attr::Interface { items } => items,
+            Attr::Subscription { items } => items,
         };
-        items.push(GraphqlAttrItem::Bare(key));
+        items.push(AttrItem::Bare(key));
     }
 
     fn push_key_value<T: ToTokens>(&mut self, key: Ident, value: T) {
         let items = match self {
-            GraphqlAttr::Normal { items } => items,
-            GraphqlAttr::Object { items } => items,
-            GraphqlAttr::Interface { items } => items,
-            GraphqlAttr::Subscription { items } => items,
+            Attr::Normal { items } => items,
+            Attr::Object { items } => items,
+            Attr::Interface { items } => items,
+            Attr::Subscription { items } => items,
         };
-        items.push(GraphqlAttrItem::KeyValue {
+        items.push(AttrItem::KeyValue {
             key,
             value: quote! { #value },
         });
@@ -2491,33 +2488,33 @@ impl GraphqlAttr {
         I: Iterator<Item = T>,
     {
         let items = match self {
-            GraphqlAttr::Normal { items } => items,
-            GraphqlAttr::Object { items } => items,
-            GraphqlAttr::Interface { items } => items,
-            GraphqlAttr::Subscription { items } => items,
+            Attr::Normal { items } => items,
+            Attr::Object { items } => items,
+            Attr::Interface { items } => items,
+            Attr::Subscription { items } => items,
         };
         let args = values
             .map(|value| {
                 quote! { #value }
             })
             .collect();
-        items.push(GraphqlAttrItem::Fn { name, args });
+        items.push(AttrItem::Fn { name, args });
     }
 }
 
-impl ToTokens for GraphqlAttr {
+impl ToTokens for Attr {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let (name, items) = match self {
-            GraphqlAttr::Normal { items } => (quote! { graphql }, items),
-            GraphqlAttr::Object { items } => (
+            Attr::Normal { items } => (quote! { graphql }, items),
+            Attr::Object { items } => (
                 quote! { juniper_from_schema::juniper::graphql_object },
                 items,
             ),
-            GraphqlAttr::Interface { items } => (
+            Attr::Interface { items } => (
                 quote! { juniper_from_schema::juniper::graphql_interface },
                 items,
             ),
-            GraphqlAttr::Subscription { items } => (
+            Attr::Subscription { items } => (
                 quote! { juniper_from_schema::juniper::graphql_subscription },
                 items,
             ),
@@ -2528,12 +2525,12 @@ impl ToTokens for GraphqlAttr {
     }
 }
 
-impl ToTokens for GraphqlAttrItem {
+impl ToTokens for AttrItem {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let new_tokens = match self {
-            GraphqlAttrItem::Bare(k) => quote! { #k },
-            GraphqlAttrItem::KeyValue { key, value } => quote! { #key = #value },
-            GraphqlAttrItem::Fn { name, args } => quote! { #name ( #(#args),* ) },
+            AttrItem::Bare(k) => quote! { #k },
+            AttrItem::KeyValue { key, value } => quote! { #key = #value },
+            AttrItem::Fn { name, args } => quote! { #name ( #(#args),* ) },
         };
         tokens.extend(new_tokens);
     }
