@@ -15,9 +15,11 @@ repository = "https://github.com/davidpdrsn/juniper-from-schema.git"
 [dependencies]
 juniper-from-schema-code-gen = { version = "0.5.2", path = "../code-gen" }
 syn = { version = "2.0.42", features = ["extra-traits"] }
+prettyplease = "0.2.15"
+proc-macro2 = { version = "1.0.70", features = [] }
 
-[dev_dependencies]
-version-sync = "0.8"
+[dev-dependencies]
+version-sync = "0.9.5"
 
 [lib]
 proc-macro = true

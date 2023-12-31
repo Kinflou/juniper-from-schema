@@ -35,16 +35,11 @@ impl<T: FromDirectiveArguments> FromDirectiveArguments for Option<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub enum Deprecation {
+    #[default]
     NoDeprecation,
     Deprecated(Option<String>),
-}
-
-impl Default for Deprecation {
-    fn default() -> Self {
-        Self::NoDeprecation
-    }
 }
 
 impl FromDirective for Deprecation {
