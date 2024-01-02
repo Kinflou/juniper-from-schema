@@ -28,6 +28,7 @@ graphql_schema! {
     }
 }
 
+use juniper_from_schema::DowncastQueryTrail;
 pub struct Query;
 
 impl QueryFields for Query {

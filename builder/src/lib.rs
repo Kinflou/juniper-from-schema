@@ -54,6 +54,7 @@ use std::{
     fs,
     path::{Path, PathBuf},
 };
+use juniper_from_schema_code_gen::utils;
 
 /// Simple compilation of a GraphQL schema literal.
 pub fn compile_schema_literal(schema: &str) -> Result<(), Box<dyn Error>> {
@@ -148,8 +149,9 @@ impl CodeGen {
         }
 
         let code = code_gen.finish().generate_code()?;
+        let code = utils::pretty_print(&code);
 
-        fs::write(&dest_path, code.to_string())?;
+        fs::write(&dest_path, code)?;
 
         println!("cargo:rerun-if-changed=build.rs");
 

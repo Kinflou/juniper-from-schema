@@ -17,10 +17,7 @@ use ast_pass::{code_gen_pass::CodeGenPass, error, AstData};
 use graphql_parser::parse_schema;
 use proc_macro2::Span;
 use quote::quote;
-use std::{
-    fmt,
-    path::{Path, PathBuf},
-};
+use std::{fmt, path::{Path, PathBuf}};
 
 const DATE_TIME_SCALAR_NAME: &str = "DateTimeUtc";
 const DATE_SCALAR_NAME: &str = "Date";
@@ -82,9 +79,7 @@ impl CodeGen {
 
         match output.gen_juniper_code(&doc) {
             Ok(mut tokens) => {
-                if debugging_enabled() {
-                    eprintln!("{}", tokens);
-                }
+                if debugging_enabled() { eprintln!("{}", tokens); }
 
                 if let Some(path) = schema_path {
                     include_literal_schema(&mut tokens, path.as_path());
