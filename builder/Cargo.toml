@@ -12,7 +12,6 @@ homepage = "https://github.com/davidpdrsn/juniper-from-schema"
 keywords = ["web", "graphql", "juniper"]
 license = "MIT"
 name = "juniper-from-schema-build"
-readme = "README.md"
 repository = "https://github.com/davidpdrsn/juniper-from-schema.git"
 
 [dependencies]
