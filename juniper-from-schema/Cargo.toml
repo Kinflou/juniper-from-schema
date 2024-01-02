@@ -1,5 +1,5 @@
 [package]
-version = "0.5.2"
+version = "0.6.0-dev"
 authors = [
     "David Pedersen <david.pdrsn@gmail.com>",
     "Kinflow"
@@ -23,7 +23,7 @@ git = "https://github.com/graphql-rust/juniper"
 rev = "ace6935"
 
 [dependencies]
-juniper-from-schema-proc-macro = { version = "0.5.2", path = "../proc-macro" }
+juniper-from-schema-proc-macro = { version = "0.6.0-dev", path = "../proc-macro" }
 
 futures = "0.3"
 

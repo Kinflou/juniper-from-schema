@@ -1,6 +1,9 @@
 [package]
-version = "0.5.2"
-authors = ["David Pedersen <david.pdrsn@gmail.com>"]
+version = "0.6.0-dev"
+authors = [
+    "David Pedersen <david.pdrsn@gmail.com>",
+    "Kinflow"
+]
 categories = ["web-programming"]
 description = "Internal code generation crate for juniper-from-schema"
 documentation = "https://docs.rs/juniper-from-schema-proc-macro"
@@ -13,7 +16,7 @@ readme = "README.md"
 repository = "https://github.com/davidpdrsn/juniper-from-schema.git"
 
 [dependencies]
-juniper-from-schema-code-gen = { version = "0.5.2", path = "../code-gen" }
+juniper-from-schema-code-gen = { version = "0.6.0-dev", path = "../code-gen" }
 syn = { version = "2.0.42", features = ["extra-traits"] }
 prettyplease = "0.2.15"
 proc-macro2 = { version = "1.0.70", features = [] }

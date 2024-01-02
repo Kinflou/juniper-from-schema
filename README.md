@@ -11,9 +11,14 @@ removes most of the boilerplate involved in using Juniper.
 
 [macro calls]: https://graphql-rust.github.io/types/objects/complex_fields.html
 
+
 # Looking for juniper 0.15 support?
 
-The version of juniper-from-schema that is released on crates.io (0.5.2) doesn't support juniper 0.15. However the master branch does! So you will have to use a git dependency for now. We plan to do an official release soon. Follow [this](https://github.com/davidpdrsn/juniper-from-schema/milestone/1) milestone to see whats left.
+The version of juniper-from-schema that is released on crates.io (0.5.2) doesn't support juniper 0.15.
+However, the master branch does! So you will have to use a git dependency for now.
+We plan to do an official release soon.
+Follow [this](https://github.com/davidpdrsn/juniper-from-schema/milestone/1) milestone to see what's left.
+
 
 # Example
 
@@ -87,6 +92,7 @@ See the [crate documentation](https://docs.rs/juniper-from-schema/) for a usage 
 # N+1s
 
 If you're having issues with N+1 query bugs consider using [juniper-eager-loading](https://crates.io/crates/juniper-eager-loading). It was built to integrate seamlessly with juniper-from-schema.
+
 
 # Development
 

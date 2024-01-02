@@ -46,7 +46,7 @@
     unused_variables
 )]
 #![recursion_limit = "256"]
-#![doc(html_root_url = "https://docs.rs/juniper-from-schema-build/0.5.2")]
+#![doc(html_root_url = "https://docs.rs/juniper-from-schema-build/0.6.0-dev")]
 
 use std::{
     env,
