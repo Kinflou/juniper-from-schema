@@ -60,9 +60,6 @@
 //! How you could implement that schema:
 //!
 //! ```
-//! #[macro_use]
-//! extern crate juniper;
-//!
 //! use juniper_from_schema::graphql_schema_from_file;
 //!
 //! // This is the important line
@@ -207,13 +204,14 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/interface.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
+//! #
 //! # fn main() {}
+//! #
 //! # pub struct Context;
 //! # impl juniper::Context for Context {}
+//! #
 //! # pub struct Article { id: ID, text: String }
 //! # impl ArticleFields for Article {
 //! #     fn field_id(
@@ -225,6 +223,7 @@
 //! #         executor: &Executor<Context>,
 //! #     ) -> FieldResult<&String> { unimplemented!() }
 //! # }
+//! #
 //! # pub struct Tweet { id: ID, text: String }
 //! # impl TweetFields for Tweet {
 //! #     fn field_id(
@@ -294,10 +293,9 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/union_types.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
+//! #
 //! # fn main() {}
 //! # pub struct Context;
 //! # impl juniper::Context for Context {}
@@ -375,8 +373,6 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/input_types.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -460,8 +456,6 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/enumeration_types.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -530,8 +524,6 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/default_argument_values.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -649,8 +641,6 @@
 //! Abbreviated example (find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/subscription.rs)):
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -708,8 +698,6 @@
 //! Abbreviated example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -785,8 +773,6 @@
 //! Abbreviated example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -858,8 +844,6 @@
 //! `"borrowed"` are not supported:
 //!
 //! ```compile_fail
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use std::pin::Pin;
 //! # use juniper::*;
 //! # use juniper::futures::stream::Stream;
@@ -984,8 +968,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper_from_schema::*;
 //! # use juniper::*;
 //! # pub struct Context;
@@ -1033,8 +1015,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper_from_schema::*;
 //! # use juniper::*;
 //! # pub struct Context;
@@ -1080,8 +1060,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper_from_schema::*;
 //! # use juniper::*;
 //! # pub struct Context;
@@ -1202,8 +1180,6 @@
 //! Find [complete example here](https://github.com/davidpdrsn/juniper-from-schema/blob/master/examples/query_trails.rs)
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -1341,8 +1317,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema;
 //! # fn main() {}
@@ -1461,8 +1435,6 @@
 //! Abbreviated example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper_from_schema::*;
 //! # pub struct Context;
 //! # impl juniper::Context for Context {}
@@ -1535,8 +1507,6 @@
 //! You can also elide the `'a` lifetime:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper_from_schema::*;
 //! # pub struct Context;
 //! # impl juniper::Context for Context {}
@@ -1628,8 +1598,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema_from_file;
 //! # fn main() {}
@@ -1681,8 +1649,6 @@
 //! Example:
 //!
 //! ```
-//! # #[macro_use]
-//! # extern crate juniper;
 //! # use juniper::*;
 //! # use juniper_from_schema::graphql_schema_from_file;
 //! # fn main() {}
@@ -1745,6 +1711,7 @@
     unused_must_use
 )]
 #![doc(html_root_url = "https://docs.rs/juniper-from-schema/0.5.2")]
+#![doc(html_root_url = "https://docs.rs/juniper-from-schema/0.6.0-dev")]
 
 use juniper::{DefaultScalarValue, LookAheadSelection};
 use std::marker::PhantomData;
